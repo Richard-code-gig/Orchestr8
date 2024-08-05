@@ -1,0 +1,75 @@
+sql_flavour: snowflake
+tasks:
+  - task_name: my_test_task_1
+    schedule: "1 MINUTE"
+    # cron_schedule: "*/1 * * * *"  # Cron format
+    warehouse: compute_wh
+    tests:
+      - target_tables:
+          - tasty_bytes_sample_data.raw_pos.menu_name
+        tests:
+          - type: row_count
+            threshold: 1
+          - type: default_value_check
+            column: SOURCE_SYSTEM
+            default_value: 'TEST_DATA'
+          - type: primary_key_uniqueness
+            column: ID
+          # - type: foreign_key
+          #   foreign_key: fk_column
+          #   reference_table: reference_table
+          #   reference_key: ref_key
+          - type: data_type_check
+            column: CREATED_DATETIME
+            expected_type: TIMESTAMP_NTZ
+          - type: null_check
+            column: MENU_ITEM_NAME
+          - type: custom_query
+            query: SELECT 'custom_query' as test_type, 'tasty_bytes_sample_data.raw_pos.menu_name' as table_name, COUNT(*) > 0 AS error FROM tasty_bytes_sample_data.raw_pos.menu_name WHERE INGREDIENTS IS NULL
+          - type: default_value_check
+            column: OPERATION_ID
+            default_value: 111
+          - type: unique_value_check
+            column: ID
+          - type: data_range_check
+            column: CREATED_DATETIME
+            start_date: '2024-07-28'
+            end_date: '2024-07-29'
+          - type: custom_query
+            query: SELECT 'custom_query' as test_type, 'tasty_bytes_sample_data.raw_pos.menu_name' as table_name, COUNT(*) < 2 AS error FROM tasty_bytes_sample_data.raw_pos.menu_name WHERE MENU_ITEM_NAME = 'Bottled Soda'
+
+error_reporting:
+  - method: mock
+    config:
+      api_key: mock
+  - method: slack
+    config:
+      webhook_url: "<slack_url>"
+  # - method: grafana
+  #   config:
+  #     api_key: "<your_grafana_api_key>"
+  #     endpoint: "<grafana_endpoint>"
+  #  - method: datadog
+  #     config:
+  #       api_key: "<your_datadog_api_key>"
+  #       endpoint: "<datadog_endpoint>"
+
+      
+  # - task_name: my_test_task_2
+  #   schedule: "1 MINUTE"
+  #   cron_schedule: "*/1 * * * *"
+  #   warehouse: my_compute_warehouse
+  #   tests:
+  #     - target_tables:
+  #         - table7
+  #       tests:
+  #         - type: custom_query
+  #           query: SELECT COUNT(*) FROM table7 WHERE order_status = 'pending'
+  #         - type: default_value_check
+  #           column: shipping_status
+  #           default_value: 'shipped'
+  #   error_reporting:
+  #     - method: datadog
+  #       config:
+  #         api_key: "<your_datadog_api_key>"
+  #         endpoint: "<datadog_endpoint>"
