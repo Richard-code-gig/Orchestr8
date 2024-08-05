@@ -20,7 +20,7 @@ This project provides a universal orchestrator for managing tasks workflows spec
 cd Orchestr8
 python3 -m venv venv
 source venv/bin/activate
-pip -r `requiremnets.txt
+pip -r `requiremnets.txt`
 ```
 5. Run workflow [using the example file given]:
    On same script
