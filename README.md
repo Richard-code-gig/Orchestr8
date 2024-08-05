@@ -20,14 +20,14 @@ This project provides a universal orchestrator for managing tasks workflows spec
 cd Orchestr8
 python3 -m venv venv
 source venv/bin/activate
-pip -r requiremnets.txt
+pip -r `requiremnets.txt
 ```
 5. Run workflow [using the example file given]:
    On same script
 ```sh
 cd Orchestr8
 export PYTHONPATH=.
-python3 example_same_script.py`
+python3 `example_same_script.py`
 ```
    On different script
 ```sh
@@ -39,7 +39,7 @@ python3 Scheduler/task_workflow.py `Scheduler/commands.sql`
 ```sh
 cd Orchestr8
 export PYTHONPATH=.
-pytest tests`
+pytest `tests`
 ```
 ## License
 This project is licensed under the MIT License.
