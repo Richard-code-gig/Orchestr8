@@ -1,7 +1,7 @@
 import importlib
 
 # Load settings module dynamically
-settings = importlib.import_module('Scheduler.src.SETTINGS')
+settings = importlib.import_module('Scheduler.src.config')
 
 def get_setting(name:str, default=None) -> str:
     """Retrieve a setting value from the settings module."""
@@ -13,7 +13,15 @@ def get_scheduler_type():
 
 def get_import_file():
     """Get the type of scheduler."""
-    return get_setting('CONFIG_FILE', 'config.py')
+    return get_setting('IMPORT_FILE', 'Scheduler/src/import_file.py')
+
+def get_parameter_file():
+    """Get parameter file for automated tests."""
+    return get_setting('PARAMETER_JSON', 'Job/test_parameter.json')
+
+def get_commands_file():
+    """Get commands file for sql template automation."""
+    return get_setting('COMMANDS_SQL', 'Scheduler/commands.sql')
 
 def get_misfire_grace_time():
     """Get the grace time for misfires."""
@@ -50,7 +58,3 @@ def get_error_log_settings():
 def debug_config():
     """Get external workstation configuration."""
     return get_setting('DEBUG', False)
-
-def get_workstation_config():
-    """Get external workstation configuration."""
-    return get_setting('WORKSTATION', {})

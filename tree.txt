@@ -1,0 +1,94 @@
+Orchestr8/
+├── .gitignore
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── Databases/
+│   ├── MongoDb/
+│   │   ├── checker.py
+│   │   └── convert_query_cmd.py
+│   ├── MySql/
+│   │   ├── scripts/
+│   │   │   ├── checker.sql
+│   │   │   ├── convert_sql_cmd.py
+│   │   │   └── orchestrate.py
+│   ├── Postgres/
+│   │   ├── postgres_config.json
+│   │   ├── scripts/
+│   │   │   ├── checker.sql
+│   │   │   ├── convert_sql_cmd.py
+│   │   │   └── orchestrate.py
+│   ├── SQLite/
+│   │   ├── __init__.py
+│   │   ├── scripts/
+│   │   │   ├── __init__.py
+│   │   │   ├── example_loader.py
+│   │   │   └── sqlite_connect.py
+│   ├── Snowflake/
+│   │   ├── __init__.py
+│   │   ├── config.json
+│   │   ├── scripts/
+│   │   │   ├── __init__.py
+│   │   │   ├── convert_sql_cmd.py
+│   │   │   ├── db_task.py
+│   │   │   ├── loader.py
+│   │   │   ├── orchestrate.py
+│   │   │   ├── parameter.json
+│   │   │   └── snow_connect.py
+│   ├── __init__.py
+│   └── connect_to_db.py
+├── Job/
+│   ├── __init__.py
+│   ├── alerts.py
+│   ├── automated_test.py
+│   ├── test_config_details.md
+│   ├── test_context_manager.py
+│   └── test_parameter.yaml
+├── LICENSE
+├── MANIFEST.in
+├── README.md
+├── Scheduler/
+│   ├── __init__.py
+│   ├── commands.sql
+│   ├── jobs.sqlite
+│   ├── src/
+│   │   ├── SETTINGS.py
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── copy_settings.py
+│   │   ├── create_task.py
+│   │   ├── import_file.py
+│   │   ├── job_scheduler.py
+│   │   ├── modify_task.py
+│   │   ├── module_registry.py
+│   │   ├── parse_create_task.py
+│   │   ├── parse_modify_task.py
+│   │   └── utils.py
+│   ├── task_manager.py
+│   └── task_workflow.py
+├── __init__.py
+├── directory_tree.py
+├── docs/
+│   ├── api_reference/
+│   ├── developer_guide/
+│   │   └── contributing.md
+│   ├── index.md
+│   ├── user_guide/
+│   │   └── installation.md
+├── example.db
+├── example_calculator.py
+├── example_test.py
+├── jobs.sqlite
+├── pyproject.toml
+├── requirements.txt
+├── setup.cfg
+├── setup.py
+├── setup_env.bat
+├── setup_env.sh
+├── tests/
+│   ├── __init__.py
+│   ├── test_function_registry.py
+│   ├── test_parse_create_task.py
+│   ├── test_parse_modify_task.py
+│   ├── test_task_creation.py
+│   ├── test_task_modification.py
+│   └── test_utils.py

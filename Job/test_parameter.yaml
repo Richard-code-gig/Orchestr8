@@ -1,12 +1,12 @@
-sql_flavour: snowflake
+sql_flavour: sqlite
 tasks:
-  - task_name: my_test_task_1
+  - task_name: data_validate
     schedule: "1 MINUTE"
     # cron_schedule: "*/1 * * * *"  # Cron format
     warehouse: compute_wh
     tests:
       - target_tables:
-          - tasty_bytes_sample_data.raw_pos.menu_name
+          - menu_items
         tests:
           - type: row_count
             threshold: 1
@@ -19,9 +19,6 @@ tasks:
           #   foreign_key: fk_column
           #   reference_table: reference_table
           #   reference_key: ref_key
-          - type: data_type_check
-            column: CREATED_DATETIME
-            expected_type: TIMESTAMP_NTZ
           - type: null_check
             column: MENU_ITEM_NAME
           - type: custom_query
@@ -42,9 +39,9 @@ error_reporting:
   - method: mock
     config:
       api_key: mock
-  - method: slack
-    config:
-      webhook_url: "<slack_url>"
+  # - method: slack
+  #   config:
+  #     webhook_url: "<slack_url>"
   # - method: grafana
   #   config:
   #     api_key: "<your_grafana_api_key>"
@@ -53,23 +50,3 @@ error_reporting:
   #     config:
   #       api_key: "<your_datadog_api_key>"
   #       endpoint: "<datadog_endpoint>"
-
-      
-  # - task_name: my_test_task_2
-  #   schedule: "1 MINUTE"
-  #   cron_schedule: "*/1 * * * *"
-  #   warehouse: my_compute_warehouse
-  #   tests:
-  #     - target_tables:
-  #         - table7
-  #       tests:
-  #         - type: custom_query
-  #           query: SELECT COUNT(*) FROM table7 WHERE order_status = 'pending'
-  #         - type: default_value_check
-  #           column: shipping_status
-  #           default_value: 'shipped'
-  #   error_reporting:
-  #     - method: datadog
-  #       config:
-  #         api_key: "<your_datadog_api_key>"
-  #         endpoint: "<datadog_endpoint>"

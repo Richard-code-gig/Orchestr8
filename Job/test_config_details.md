@@ -20,7 +20,6 @@ row_count: Checks the row count of the table.
 default_value_check: Ensures a column has a default value.
 primary_key_uniqueness: Checks for uniqueness in the primary key column.
 foreign_key: Validates foreign key relationships.
-data_type_check: Checks the data type of a column.
 null_check: Ensures a column does not contain NULL values.
 custom_query: Runs a custom SQL query provided by the user.
 unique_value_check: Ensures a column contains unique values.

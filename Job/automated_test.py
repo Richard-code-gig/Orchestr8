@@ -59,15 +59,6 @@ def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
                         LEFT JOIN {reference_table} ON {table}.{foreign_key} = {reference_table}.{reference_key} 
                         WHERE {reference_table}.{reference_key} IS NULL
                     """)
-                elif test_type == 'data_type_check':
-                    column = test_detail['column']
-                    expected_type = test_detail['expected_type']
-                    sql_commands.append(f"""
-                        SELECT 'data_type_check' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 0 AS error 
-                        FROM {table} 
-                        WHERE TRY_CAST({column}::STRING AS {expected_type}) IS NULL
-                    """)
                 elif test_type == 'null_check':
                     column = test_detail['column']
                     sql_commands.append(f"""

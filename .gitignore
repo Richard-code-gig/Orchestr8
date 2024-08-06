@@ -90,3 +90,6 @@ dmypy.json
 # Ignore SQLite database files
 *.sqlite
 *.sqlite3
+example.db
+
+directory_tree.py

@@ -4,11 +4,11 @@ import signal
 from typing import Optional
 import sys
 import time
+from argparse import ArgumentParser
 from Scheduler.src.create_task import execute_command
 from Scheduler.src.module_registry import register_function
 from Scheduler.src.job_scheduler import scheduler
 from Scheduler.src.utils import get_scheduler_shutdown_wait, get_import_file
-from Scheduler.src.job_scheduler import scheduler
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -88,18 +88,25 @@ def read_input(source: str) -> str:
         # Assume it's a string
         return source.strip()
     
-def main():
+def main() -> None:
+    """
+    Main function to handle command-line arguments and execute commands.
+
+    Usage:
+    python parse.py <string_or_file_path>
+    """
+    parser = ArgumentParser(description='Command-line tool for parsing and executing commands.')
+    parser.add_argument('source', type=str, help='The source sql string or file path to read sql commands from')
+    
+    args = parser.parse_args()
+
     try:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
         load_and_register_modules(get_import_file())
 
-        if len(sys.argv) != 2:
-            logging.error("Usage: python parse.py <string_or_file_path>")
-            sys.exit(1)
-
-        source = sys.argv[1]
+        source = args.source.strip()
 
         if not source:
             logging.error("Error: No input provided")

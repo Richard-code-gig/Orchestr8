@@ -2,6 +2,7 @@ import logging
 import signal
 from typing import Optional
 import sys
+from argparse import ArgumentParser
 from src.modify_task import execute_command
 from src.job_scheduler import scheduler
 from src.utils import get_scheduler_shutdown_wait
@@ -19,17 +20,27 @@ def signal_handler(signum: int, frame: Optional[object]) -> None:
     sys.exit(0)
 
 def main() -> None:
+    """
+    Main function to handle command-line arguments and execute commands.
     
+    Commands:
+    - remove_all_tasks: Removes all scheduled tasks.
+    - get_all_tasks: Prints all scheduled tasks.
+    - get_task <task_name>: Retrieves details of a specific task.
+    """
+    parser = ArgumentParser(description='Command-line tool for task management.')
+    parser.add_argument('command', type=str, help='The command to execute')
+    parser.add_argument('task_name', nargs='?', type=str, help='The name of the task (optional)')
+    
+    args = parser.parse_args()
+
     try:
         # Set up signal handling for graceful shutdown
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-        if len(sys.argv) < 2:
-            raise IndexError("No command provided")
-
-        input_command = sys.argv[1].strip()
-        logger.info(input_command)
+        input_command = args.command.strip().lower()
+        logger.info(f"Command received: {input_command}")
 
         if input_command.lower() == "remove_all_tasks":
             scheduler.remove_all_jobs()
@@ -39,7 +50,7 @@ def main() -> None:
             scheduler.print_jobs()
 
         elif input_command.lower() == "get_task":
-            task_name = sys.argv[2].strip() if len(sys.argv) > 2 else None
+            task_name = args.task_name.strip()
             if task_name:
                 job = scheduler.get_job(task_name)
                 if job:

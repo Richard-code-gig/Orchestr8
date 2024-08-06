@@ -1,17 +1,18 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from Scheduler.src.utils import (
-    get_setting, 
+    get_setting,
     get_scheduler_type, 
+    get_import_file,
+    get_parameter_file,
+    get_commands_file,
     get_misfire_grace_time, 
     get_scheduler_start_paused, 
     get_scheduler_shutdown_wait, 
     get_jobstore_settings, 
     get_timezone, 
     get_error_log_settings, 
-    debug_config,
-    get_import_file,
-    get_workstation_config
+    debug_config
 )
 
 class TestSettingsFunctions(unittest.TestCase):
@@ -23,13 +24,30 @@ class TestSettingsFunctions(unittest.TestCase):
         
         # Test retrieval with default value
         self.assertEqual(get_setting('SOME_SETTING', 'default_value'), 'some_value')
-        # self.assertEqual(get_setting('UNKNOWN_SETTING', 'default_value'), 'default_value')
         
     @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
     def test_get_scheduler_type(self, mock_settings):
         """Test retrieval of scheduler type."""
         mock_settings.SCHEDULER_TYPE = 'DaemonScheduler'
         self.assertEqual(get_scheduler_type(), 'DaemonScheduler')
+
+    @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
+    def test_import_file(self, mock_settings):
+        """Test retrieval of debug configuration."""
+        mock_settings.IMPORT_FILE = 'config.py'
+        self.assertEqual(get_import_file(), 'config.py')
+    
+    @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
+    def test_parameter_file(self, mock_settings):
+        """Test retrieval of debug configuration."""
+        mock_settings.PARAMETER_JSON = 'config.yaml'
+        self.assertEqual(get_parameter_file(), 'config.yaml')
+
+    @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
+    def test_commands_file(self, mock_settings):
+        """Test retrieval of debug configuration."""
+        mock_settings.COMMANDS_SQL = 'config.sql'
+        self.assertEqual(get_commands_file(), 'config.sql')
 
     @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
     def test_get_misfire_grace_time(self, mock_settings):
@@ -78,18 +96,6 @@ class TestSettingsFunctions(unittest.TestCase):
         """Test retrieval of debug configuration."""
         mock_settings.DEBUG = True
         self.assertEqual(debug_config(), True)
-
-    @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
-    def test_config_file(self, mock_settings):
-        """Test retrieval of debug configuration."""
-        mock_settings.CONFIG_FILE = 'config.py'
-        self.assertEqual(get_import_file(), 'config.py')
-
-    @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
-    def test_get_workstation_config(self, mock_settings):
-        """Test retrieval of workstation configuration."""
-        mock_settings.WORKSTATION = {'hostname': 'workstation1', 'ip': '192.168.1.1'}
-        self.assertEqual(get_workstation_config(), {'hostname': 'workstation1', 'ip': '192.168.1.1'})
 
 if __name__ == "__main__":
     unittest.main()

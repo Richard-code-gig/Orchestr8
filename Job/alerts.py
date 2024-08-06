@@ -49,14 +49,17 @@ def _send_grafana_alert(api_key, endpoint, message):
 def send_alerts(error_reporting, messages):
     combined_message = "\n".join(messages)
     for method in error_reporting:
-        if method['method'] == 'slack':
-            _send_slack_alert(method['config']['webhook_url'], combined_message)
-        elif method['method'] == 'datadog':
-            _send_datadog_alert(method['config']['api_key'], method['config']['endpoint'], combined_message)
-        elif method['method'] == 'grafana':
-            api_key = method['config']['api_key']
-            endpoint = method['config']['endpoint']
-            _send_grafana_alert(api_key, endpoint, combined_message)
-
-        else:
+        try:
+            if method['method'] == 'slack':
+                _send_slack_alert(method['config']['webhook_url'], combined_message)
+            elif method['method'] == 'datadog':
+                _send_datadog_alert(method['config']['api_key'], method['config']['endpoint'], combined_message)
+            elif method['method'] == 'grafana':
+                api_key = method['config']['api_key']
+                endpoint = method['config']['endpoint']
+                _send_grafana_alert(api_key, endpoint, combined_message)
+            else:
+                _mock_send_alert('mock', combined_message)
+        except Exception as e:
+            logger.info(f"Error occured: {e}\nDefaulting to Mock alert")
             _mock_send_alert('mock', combined_message)

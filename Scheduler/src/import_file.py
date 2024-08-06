@@ -1,4 +1,4 @@
 from Job.automated_test import data_validate
-from example_same_script import minus_task
-from example_same_script import times_task
-from example_same_script import plusminus_task
+from example_calculator import minus_task
+from example_calculator import times_task
+from example_calculator import plusminus_task

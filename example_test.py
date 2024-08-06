@@ -11,10 +11,11 @@ import time
 from Scheduler.src.create_task import execute_command
 from Scheduler.src.module_registry import register_function
 from Scheduler.src.job_scheduler import scheduler
-from Scheduler.src.utils import get_scheduler_shutdown_wait
+from Scheduler.src.utils import get_scheduler_shutdown_wait, get_parameter_file
 from Job.test_context_manager import ConfigManager
 from Scheduler.src.job_scheduler import scheduler
 from Job.automated_test import data_validate
+from Databases.SQLite.scripts.example_loader import run_script
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -28,10 +29,11 @@ def signal_handler(signum: int, frame: Optional[object]) -> None:
 register_function('data_validate', data_validate)
 
 def main() -> None:
+    run_script()
 
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(description="Deploy Snowflake Procedure")
-    parser.add_argument('--sql_flavour', type=str, default='snowflake', help="Authentication method: env, secrets_manager, encrypted_file, oauth, or saml")
+    parser.add_argument('--sql_flavour', type=str, default='sqlite', help="Authentication method: env, secrets_manager, encrypted_file, oauth, or saml")
     parser.add_argument('--auth_method', type=str, default='env', help="Authentication method: env, secrets_manager, encrypted_file, oauth, or saml")
     parser.add_argument('--secret_name', type=str, help="Secret name for AWS Secrets Manager (required for secrets_manager auth method)")
     parser.add_argument('--config_file', type=str, help="Path to the encrypted config file (required for encrypted_file auth method)")
@@ -46,7 +48,7 @@ def main() -> None:
         signal.signal(signal.SIGTERM, signal_handler)
 
         # Path to the YAML configuration file
-        CONFIG_FILE = 'Job/test_parameter.yaml'
+        CONFIG_FILE = get_parameter_file()
         
         # Create an instance of ConfigManager
         config_manager = ConfigManager(CONFIG_FILE)
@@ -70,7 +72,9 @@ def main() -> None:
             try:
                 while True:
                     execute_command(command_run_test)
-                    time.sleep(10)
+                    logger.info("You will get a success alert in console in 1 minute ")
+                    logger.info("Press ctrl c to exit")
+                    time.sleep(5)
             except (KeyboardInterrupt, SystemExit):
                 # Graceful shutdown handled by signal_handler
                 pass

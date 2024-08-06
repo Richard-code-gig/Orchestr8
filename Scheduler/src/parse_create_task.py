@@ -37,7 +37,7 @@ def _separate_args_kwargs(input_data: Union[str, List[Any]]) -> Union[List[Any],
             return args, kwargs
     
     if not isinstance(input_data, list):
-        return [], {} # without evaluation we only expect a str or list
+        return [], {} # Technically without eval we only expect a str or list
 
     args = []
     kwargs = {}

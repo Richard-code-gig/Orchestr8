@@ -1,8 +1,8 @@
 include README.md
 include LICENSE
 include requirements.txt
-include Orchestr8/example_diff_script.py
-include Orchestr8/example_same_script.py
+include Orchestr8/example_test.py
+include Orchestr8/example_calculator.py
 recursive-include Orchestr8/Databases *
 recursive-include orchestr8/Job *
 recursive-include Orchestr8/Scheduler *

@@ -3,7 +3,11 @@ from pathlib import Path
 # Base Directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CONFIG_FILE = 'Scheduler/src/import_file.py'
+IMPORT_FILE = 'Scheduler/src/import_file.py'
+
+COMMANDS_FILE = 'Scheduler/commands.sql'
+
+PARAMETERS_FILE = 'Job/test_parameter.yaml'
 
 # [SCHEDULER_SETTINGS] 
 SCHEDULER_TYPE = 'BackgroundScheduler' # Option: BlockingScheduler
@@ -37,9 +41,4 @@ ADMINS = []
 
 # Local time zone for job runs. When USE_LTZ is True, this is
 # interpreted as the default user time zone.
-TIME_ZONE = "America/Chicago"
-
-USE_LTZ = True
-
-# External Workstations Configuration
-WORKSTATION = {}
+TIME_ZONE = "UTC"

@@ -1,14 +1,21 @@
-from .src import (job_scheduler, 
+from .src import (
+                  job_scheduler,
+                  config,
+                  copy_settings,
                   module_registry, 
                   parse_create_task, 
                   parse_modify_task, 
-                  utils, 
+                  utils,
                   SETTINGS
                 )
 
-__all__ = ['job_scheduler',
+__all__ = [
+            'job_scheduler',
+            'config',
+            'copy_settings',
             'module_registry', 
             'parse_create_task', 
             'parse_modify_task', 
             'utils', 
-            'SETTINGS']
+            'SETTINGS'
+          ]
