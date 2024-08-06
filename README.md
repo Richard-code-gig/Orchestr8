@@ -2,7 +2,7 @@
 # Orchestr8
 
 ## Overview
-Orchestr8 provides a universal orchestrator for managing task workflows, specifically designed for data projects based on SQL conditions.
+Orchestr8 provides a universal orchestrator based on SQL conditions for managing task workflows, specifically designed for data projects.
 
 ## Project Structure
 - `Databases/{MongoDb, MySql, Postgres, SQLite, Snowflake}/` - Contains SQL scripts, configuration files, and task setups for various databases.
