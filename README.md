@@ -97,7 +97,7 @@ Orchestr8 provides a universal orchestrator based on SQL conditions for managing
       cd Orchestr8
       task_workflow Scheduler/commands.sql
       ```
-      If the entry point script is not set, use:
+      If the entry point script is not set in line 7 above, use:
       ```sh
       python Scheduler/task_workflow.py Scheduler/commands.sql
       ```
