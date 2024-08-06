@@ -89,7 +89,7 @@ Orchestr8 provides a universal orchestrator based on SQL conditions for managing
       ```
 
 9. Orchestrate New Workflows:
-    - Write your orchestration code as needed.
+    - Write your python programs code as needed.
     - Import your entry methods in `Scheduler/src/import_file.py`.
     - Define orchestration SQL in `Scheduler/commands.sql`.
     - Run the workflow with:
