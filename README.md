@@ -103,4 +103,4 @@ Orchestr8 provides a universal orchestrator based on SQL conditions for managing
       ```
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the Apache-2.0 License.
