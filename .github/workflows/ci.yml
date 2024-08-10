@@ -30,4 +30,4 @@ jobs:
       run: echo "PYTHONPATH is set to $PYTHONPATH"
 
     - name: Run tests
-      run: pytest tests
+      run: pytest /home/runner/work/Orchestr8/tests
