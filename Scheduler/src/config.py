@@ -17,10 +17,12 @@ from pathlib import Path
 
 
 def get_user_settings_dir() -> Path:
-    # Get user-specified directory. Default to ~/Orchestr8/Scheduler/src
-    settings_dir = os.getenv('PACKAGE_PROJECT_DIR', os.path.expanduser('~/Orchestr8/Scheduler/src'))
-    settings_path = Path(settings_dir)
-    return settings_path
+    # Get user-specified directory from environment variable
+    settings_dir = os.getenv('PACKAGE_PROJECT_DIR', '')
+    if settings_dir:
+        return Path(settings_dir)
+    # Default to a relative path if the environment variable is not set
+    return Path(__file__).resolve().parent
 
 
 def load_user_settings():
