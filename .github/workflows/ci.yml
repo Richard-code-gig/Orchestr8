@@ -26,5 +26,8 @@ jobs:
       run: |
         ls -R
 
+    - name: Print PYTHONPATH
+      run: echo "PYTHONPATH is set to $PYTHONPATH"
+
     - name: Run tests
       run: pytest tests
