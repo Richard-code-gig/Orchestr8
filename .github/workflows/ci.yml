@@ -20,20 +20,10 @@ jobs:
       run: flake8 .
 
     - name: Set PACKAGE_PROJECT_DIR
-      run: echo "PACKAGE_PROJECT_DIR=/home/runner/work/Orchestr8/Orchestr8/Scheduler/src" >> $GITHUB_ENV
+      run: echo "PACKAGE_PROJECT_DIR=./Scheduler/src" >> $GITHUB_ENV
 
     - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=/home/runner/work/Orchestr8/Orchestr8" >> $GITHUB_ENV
-
-    - name: Print directory structure
-      run: |
-        ls -R
-
-    - name: Print PYTHONPATH
-      run: echo "PYTHONPATH is set to $PYTHONPATH"
-
-    - name: Print directory structure
-      run: ls -R /home/runner/work/Orchestr8/Orchestr8
+      run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
     - name: Run tests
-      run: pytest /home/runner/work/Orchestr8/Orchestr8/tests
+      run: pytest tests
