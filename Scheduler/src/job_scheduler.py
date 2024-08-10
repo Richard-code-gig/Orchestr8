@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,8 +34,9 @@ scheduler_time_zone = timezone(get_timezone().lower())
 jobstore_type = jobstore_settings.get('jobstore_type', 'sqlite')
 jobstore_url = jobstore_settings.get('jobstore_url', 'sqlite:///jobs.sqlite')
 
+
 def scheduler():
-    
+
     if jobstore_type.lower() == 'mongodb':
         from apscheduler.jobstores.mongodb import MongoDBJobStore
 
@@ -48,9 +49,9 @@ def scheduler():
             'default': SQLAlchemyJobStore(url=jobstore_url)
         }
     executors = {
-            'default': ThreadPoolExecutor(20),
-            'processpool': ProcessPoolExecutor(5)
-        }
+        'default': ThreadPoolExecutor(20),
+        'processpool': ProcessPoolExecutor(5)
+    }
     job_defaults = {
         'coalesce': True,
         'max_instances': 2
@@ -59,10 +60,14 @@ def scheduler():
     scheduler_type = get_scheduler_type()
 
     if scheduler_type.lower == 'BlockingScheduler':
-        scheduler = BlockingScheduler(jobstores=jobstores, executors=executors, 
-                                    job_defaults=job_defaults, timezone=scheduler_time_zone)
+        scheduler = BlockingScheduler(
+            jobstores=jobstores, executors=executors,
+            job_defaults=job_defaults, timezone=scheduler_time_zone
+        )
     else:
-        scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, 
-                                    job_defaults=job_defaults, timezone=scheduler_time_zone)
+        scheduler = BackgroundScheduler(
+            jobstores=jobstores, executors=executors,
+            job_defaults=job_defaults, timezone=scheduler_time_zone
+        )
     scheduler.start(paused=get_scheduler_start_paused())
     return scheduler

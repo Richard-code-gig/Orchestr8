@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +14,7 @@
 import re
 from typing import Tuple, Union, Optional, Dict, List, Any
 import ast
+
 
 def _separate_args_kwargs(input_data: Union[str, List[Any]]) -> Union[List[Any], Dict[Any, Any]]:
     if isinstance(input_data, str):
@@ -28,8 +29,8 @@ def _separate_args_kwargs(input_data: Union[str, List[Any]]) -> Union[List[Any],
                 kwargs = {}
             else:
                 args = []
-                kwargs = input_data 
-            
+                kwargs = input_data
+
         except (ValueError, SyntaxError):
             # Split the string by commas to handle mixed positional and keyword arguments
             items = [item.strip() for item in input_data.split(',')]
@@ -48,13 +49,13 @@ def _separate_args_kwargs(input_data: Union[str, List[Any]]) -> Union[List[Any],
                     except (ValueError, SyntaxError):
                         args.append(item)
             return args, kwargs
-    
+
     if not isinstance(input_data, list):
-        return [], {} # Technically without eval we only expect a str or list
+        return [], {}  # Technically without eval we only expect a str or list
 
     args = []
     kwargs = {}
-    
+
     for item in input_data:
         if isinstance(item, str) and '=' in item:
             key, value = item.split('=', 1)
@@ -64,8 +65,9 @@ def _separate_args_kwargs(input_data: Union[str, List[Any]]) -> Union[List[Any],
                 kwargs[key.strip()] = value.strip()
         else:
             args.append(item)
-    
+
     return args, kwargs
+
 
 def parse_command(command: str) -> Tuple[str, Optional[str], Optional[Dict[str, Union[str, int, bool]]]]:
     print(command)
@@ -92,9 +94,9 @@ def parse_command(command: str) -> Tuple[str, Optional[str], Optional[Dict[str, 
                     'allow_overlapping_execution': match.group('allow_overlapping_execution') == 'TRUE' if match.group('allow_overlapping_execution') else None,
                     'after': match.group('after') if match.group('after') else None,
                     'function': match.group('function').split('(')[0].strip(),  # Function name
-                    'args': match.group('args') if match.group('args') else []  # Arguments    
+                    'args': match.group('args') if match.group('args') else []  # Arguments
                 }
-                
+
                 params['args'], params['kwargs'] = _separate_args_kwargs(params['args'])
                 return action, match.group('task_name'), params
         raise ValueError("Invalid command format")

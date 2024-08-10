@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,18 +15,20 @@ import sqlite3
 import random
 from Databases.SQLite.scripts.sqlite_connect import connect_to_sqlite
 
+
 # List of sample menu items
 menu_items_list = [
-    'Beans', 'TV', 'Shirts', 'Shoes', 'Books', 'Laptops', 'Phones', 'Headphones', 
-    'Watches', 'Bags', 'Sunglasses', 'Chairs', 'Tables', 'Notebooks', 'Pens', 
-    'Backpacks', 'Coffee Makers', 'Microwaves', 'Blenders', 'Toasters', 'Fridges', 
-    'Washing Machines', 'Dryers', 'Vacuum Cleaners', 'Air Conditioners', 'Fans', 
-    'Heaters', 'Kettles', 'Cookers', 'Ovens', 'Cameras', 'Printers', 'Monitors', 
-    'Keyboards', 'Mice', 'Mouse Pads', 'Speakers', 'Microphones', 'Webcams', 
-    'Smartphones', 'Tablets', 'Game Consoles', 'Games', 'DVD Players', 'Blu-ray Players', 
-    'Projectors', 'Home Theaters', 'Wireless Chargers', 'Power Banks', 'Cases', 
+    'Beans', 'TV', 'Shirts', 'Shoes', 'Books', 'Laptops', 'Phones', 'Headphones',
+    'Watches', 'Bags', 'Sunglasses', 'Chairs', 'Tables', 'Notebooks', 'Pens',
+    'Backpacks', 'Coffee Makers', 'Microwaves', 'Blenders', 'Toasters', 'Fridges',
+    'Washing Machines', 'Dryers', 'Vacuum Cleaners', 'Air Conditioners', 'Fans',
+    'Heaters', 'Kettles', 'Cookers', 'Ovens', 'Cameras', 'Printers', 'Monitors',
+    'Keyboards', 'Mice', 'Mouse Pads', 'Speakers', 'Microphones', 'Webcams',
+    'Smartphones', 'Tablets', 'Game Consoles', 'Games', 'DVD Players', 'Blu-ray Players',
+    'Projectors', 'Home Theaters', 'Wireless Chargers', 'Power Banks', 'Cases',
     'Cables', 'Adapters', 'External Hard Drives', 'USB Flash Drives', 'Memory Cards'
 ]
+
 
 def create_table(conn):
 
@@ -44,6 +46,7 @@ def create_table(conn):
     )
     ''')
 
+
 def insert_record(conn, menu_item_name):
     # insert a record with a random OPERATION_ID
     cursor = conn.cursor()
@@ -59,6 +62,7 @@ def insert_record(conn, menu_item_name):
         # Record already exists, so we skip insertion
         pass
 
+
 def run_script():
     conn = connect_to_sqlite()
     create_table(conn)
@@ -66,6 +70,7 @@ def run_script():
         menu_item_name = random.choice(menu_items_list)  # Randomly select an item from the list
         insert_record(conn, menu_item_name)
     conn.close()
+
 
 if __name__ == "__main__":
     run_script()

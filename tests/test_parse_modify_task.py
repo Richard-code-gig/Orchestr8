@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +14,8 @@
 import unittest
 from Scheduler.src.modify_task import modify_command
 
+
 class TestModifyCommand(unittest.TestCase):
-    
     def test_alter_task_resume_suspend(self):
         command = "ALTER TASK my_task RESUME"
         expected = {'task_name': 'my_task', 'action': 'RESUME'}
@@ -91,6 +91,7 @@ class TestModifyCommand(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             modify_command("INVALID COMMAND")
         self.assertEqual(str(cm.exception), "Unknown command type")
+
 
 if __name__ == "__main__":
     unittest.main()

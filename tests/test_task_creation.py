@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,17 +24,18 @@ from Scheduler.src.job_scheduler import scheduler
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 # Define a test function to register in the function registry
 def test_function():
     assert True
 
+
 class TestTaskScheduler(unittest.TestCase):
-    
     def setUp(self):
         # Register the test function
         register_function('test_function', test_function)
 
-    @patch('Scheduler.src.create_task.logger') # Mock the loger
+    @patch('Scheduler.src.create_task.logger')  # Mock the loger
     def test_event_listener_success(self, mock_logger):
         event = MagicMock()
         event.exception = False
@@ -54,12 +55,12 @@ class TestTaskScheduler(unittest.TestCase):
 
         mock_logger.error.assert_called_with('Job test_task failed')
 
-    @patch('Scheduler.src.create_task.sched') # Mock the scheduler
-    @patch('Scheduler.src.module_registry.get_function') # Mock the get_function
+    @patch('Scheduler.src.create_task.sched')  # Mock the scheduler
+    @patch('Scheduler.src.module_registry.get_function')  # Mock the get_function
     @patch('Scheduler.src.create_task.logger')
     def test_add_task_with_schedule(self, mock_logger, mock_get_function, mock_sched):
         # register_function('test_function', test_function)
-        
+
         # Mock the function to return the test_function
         mock_get_function.return_value = test_function
 
@@ -104,16 +105,15 @@ class TestTaskScheduler(unittest.TestCase):
             "Task_id test_task added as function test_function with args [] and kwargs {}, scheduled as interval[0:01:00]"
         )
 
-
     @patch('Scheduler.src.create_task.sched')
-    @patch('Scheduler.src.module_registry.get_function') 
+    @patch('Scheduler.src.module_registry.get_function')
     @patch('Scheduler.src.create_task.logger')
     def test_add_task_with_cron(self, mock_logger, mock_get_function, mock_sched):
 
         mock_sched.add_job = MagicMock()
         mock_sched.resume_job = MagicMock()
         mock_sched.get_job = MagicMock(return_value=None)
-        
+
         add_task('test_task', {
             'function': 'test_function',
             'args': [],
@@ -122,7 +122,7 @@ class TestTaskScheduler(unittest.TestCase):
             'cron_expr': '0 0 * * *',
             'time_zone': 'UTC'
         })
-        
+
         # Assert
         mock_sched.add_job.assert_called()
         self.assertIsInstance(mock_sched.add_job.call_args[1]['trigger'], CronTrigger)
@@ -138,10 +138,10 @@ class TestTaskScheduler(unittest.TestCase):
             'kwargs': {},
             'server': '1'
         })
-        
+
         # Run
         execute_command('create_task test_task {}')
-        
+
         # Assert
         mock_add_task.assert_called_once_with('test_task', {
             'function': 'test_function',
@@ -155,12 +155,12 @@ class TestTaskScheduler(unittest.TestCase):
     @patch('Scheduler.src.create_task.sched')
     @patch('Scheduler.src.create_task.logger')
     def test_add_task_with_after(self, mock_logger, mock_sched, mock_get_function):
-        
+
         mock_get_function.return_value = test_function
 
         # Mock the scheduler's `get_job` method to return a mock job if 'existing_task' is queried
         mock_sched.get_job.side_effect = lambda job_id: MagicMock() if job_id == 'my_test_task' else None
-        mock_sched.add_job = MagicMock()  
+        mock_sched.add_job = MagicMock()
 
         params = {
             'function': 'test_function',
@@ -197,14 +197,15 @@ class TestTaskScheduler(unittest.TestCase):
         # Assert that the job was added
         mock_sched.add_job.assert_called()
         mock_sched.add_job.assert_called_with(test_function, trigger=None, id='test_task', replace_existing=True, args=[], kwargs={}, max_instances=1)
-      
-    @patch('Scheduler.src.create_task.logger') 
+
+    @patch('Scheduler.src.create_task.logger')
     def test_execute_command_unknown_action(self, mock_logger):
 
         execute_command('unknown_action test_task')
-        
+
         # Assert
         mock_logger.error.assert_called_with("Error: Invalid command format")
+
 
 if __name__ == '__main__':
     unittest.main()

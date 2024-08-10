@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,8 +22,8 @@ COMMANDS_FILE = 'Scheduler/commands.sql'
 
 PARAMETERS_FILE = 'Job/test_parameter.yaml'
 
-# [SCHEDULER_SETTINGS] 
-SCHEDULER_TYPE = 'BackgroundScheduler' # Option: BlockingScheduler
+# [SCHEDULER_SETTINGS]
+SCHEDULER_TYPE = 'BackgroundScheduler'  # Option: BlockingScheduler
 
 MISFIRE_GRACE_TIME = 30  # Grace time in seconds for handling misfires
 
@@ -31,16 +31,16 @@ SCHEDULER_START_PAUSED = False  # Whether to start the scheduler in a paused sta
 
 SCHEDULER_SHUTDOWN_WAIT = True  # (should be True). Whether to wait for jobs to complete on shutdown
 
-# [JOBSTORE_SETTINGS] 
-JOBSTORE = 'sqlite' # Option: relational databases
+# [JOBSTORE_SETTINGS]
+JOBSTORE = 'sqlite'  # Option: relational databases
 
-JOBSTORE_SQLALCHEMY_URL = 'sqlite:///jobs.sqlite' #E.g 'mysql://user:password@localhost/dbname'
+JOBSTORE_SQLALCHEMY_URL = 'sqlite:///jobs.sqlite'  # E.g 'mysql://user:password@localhost/dbname'
 
-# [DATETIME_SETTINGS] 
+# [DATETIME_SETTINGS]
 TIMEZONE = 'UTC'
 
-# [ERROR_SETTINGS] 
-DEBUG = False #Change to True to get debugging error during development
+# [ERROR_SETTINGS]
+DEBUG = False  # Change to True to get debugging error during development
 
 ERROR_LOG = 'sqlite'
 

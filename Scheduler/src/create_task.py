@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 sched = scheduler()
 task_conditions = {}
 
+
 def event_listener(event: JobEvent) -> None:
     if event.exception:
         logger.error(f"Job {event.job_id} failed")
@@ -50,13 +51,14 @@ def event_listener(event: JobEvent) -> None:
                         except pytz.UnknownTimeZoneError:
                             logger.error(f"Unknown timezone: {time_zone}. Defaulting to UTC.")
                             tz = pytz.UTC
-                        
+
                         # Convert current time to user's timezone
                         local_time = datetime.now(tz=tz)
-                        sched.modify_job(task_name,next_run_time=local_time)
+                        sched.modify_job(task_name, next_run_time=local_time)
+
 
 def add_task(task_name: str, params: Dict[str, Union[str, int, bool]]) -> None:
-    
+
     function_name = params['function']
     args = params['args']
     kwargs = params['kwargs']
@@ -70,7 +72,7 @@ def add_task(task_name: str, params: Dict[str, Union[str, int, bool]]) -> None:
 
     if after_tasks and (schedule_num or cron_expr):
         raise ValueError("Only one of 'after' or 'schedule' can be used")
-    
+
     # Check if job already exists
     if sched.get_job(task_name):
         logger.info(f"Job {task_name} already exists, skipping addition.")
@@ -101,8 +103,8 @@ def add_task(task_name: str, params: Dict[str, Union[str, int, bool]]) -> None:
         for task in after_tasks_list:
             if not sched.get_job(task):
                 raise ValueError(f"Required task '{task}' does not exist to create and schedule {task_name}.")
-            
-        task_conditions[task_name] = {'after': after_tasks_list} 
+
+        task_conditions[task_name] = {'after': after_tasks_list}
 
         # To do:
         # For thread safety, set trigger to an hour after the schedule time of latest after task
@@ -122,6 +124,7 @@ def add_task(task_name: str, params: Dict[str, Union[str, int, bool]]) -> None:
         sched.resume_job(task_name)  # task is resumed if no dependencies
         logger.info(f"Task_id {task_name} added as function {function_name} with args {args} and kwargs {kwargs}, scheduled as {trigger}")
 
+
 def execute_command(command: str) -> None:
     try:
         action, task_name, params = parse_command(command)
@@ -132,6 +135,7 @@ def execute_command(command: str) -> None:
             raise ValueError("Unknown action")
     except ValueError as e:
         logger.error(f"Error: {e}")
+
 
 # Register event listener
 sched.add_listener(event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)

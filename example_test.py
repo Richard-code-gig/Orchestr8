@@ -2,16 +2,16 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Example showing how to use Orchestr8 to orchestrate 
+"""Example showing how to use Orchestr8 to orchestrate
 function workflows defined in a separate script
 """
 
@@ -26,12 +26,12 @@ from Scheduler.src.module_registry import register_function
 from Scheduler.src.job_scheduler import scheduler
 from Scheduler.src.utils import get_scheduler_shutdown_wait, get_parameter_file
 from Job.test_context_manager import ConfigManager
-from Scheduler.src.job_scheduler import scheduler
 from Job.automated_test import data_validate
 from Databases.SQLite.scripts.example_loader import run_script
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 
 def signal_handler(signum: int, frame: Optional[object]) -> None:
     """Handle shutdown signals."""
@@ -39,7 +39,9 @@ def signal_handler(signum: int, frame: Optional[object]) -> None:
     scheduler().shutdown(get_scheduler_shutdown_wait())
     sys.exit(0)
 
+
 register_function('data_validate', data_validate)
+
 
 def main() -> None:
     run_script()
@@ -54,7 +56,7 @@ def main() -> None:
     parser.add_argument('--oauth_token', type=str, help="OAuth token (required for oauth auth method)")
     parser.add_argument('--saml_response', type=str, help="SAML response (required for saml auth method)")
     args = parser.parse_args()
-    
+
     try:
         # Set up signal handling for graceful shutdown
         signal.signal(signal.SIGINT, signal_handler)
@@ -62,19 +64,19 @@ def main() -> None:
 
         # Path to the YAML configuration file
         CONFIG_FILE = get_parameter_file()
-        
+
         # Create an instance of ConfigManager
         config_manager = ConfigManager(CONFIG_FILE)
 
         for task in config_manager.get_tasks():
             arg_value = [
-                    args.sql_flavour, args.auth_method,
-                    args.secret_name, args.config_file,
-                    args.encryption_key, args.oauth_token,
-                    args.saml_response, config_manager.get_error_reporting(),
-                    task['tests']
+                args.sql_flavour, args.auth_method,
+                args.secret_name, args.config_file,
+                args.encryption_key, args.oauth_token,
+                args.saml_response, config_manager.get_error_reporting(),
+                task['tests']
             ]
-            
+
             task_name = task['task_name']
             command_run_test = f"""
                 CREATE TASK {task_name}
@@ -93,6 +95,7 @@ def main() -> None:
                 pass
     finally:
         logger.info("Exiting the main function")
+
 
 if __name__ == "__main__":
     main()

@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,15 @@ from typing import Callable, Dict
 import unittest
 from Scheduler.src.module_registry import get_function, register_function, function_registry
 
+
 # Sample functions for testing
 def sample_function_1():
     return "Function 1"
 
+
 def sample_function_2(x):
     return f"Function 2 with {x}"
+
 
 class TestFunctionRegistry(unittest.TestCase):
     def setUp(self):
@@ -31,11 +34,11 @@ class TestFunctionRegistry(unittest.TestCase):
         # Register functions
         register_function("func1", sample_function_1)
         register_function("func2", sample_function_2)
-    
+
         # Check if functions are registered correctly
         self.assertIn("func1", function_registry)
         self.assertIn("func2", function_registry)
-        
+
         # Check if registered functions are correct
         self.assertEqual(function_registry["func1"], sample_function_1)
         self.assertEqual(function_registry["func2"], sample_function_2)
@@ -46,7 +49,7 @@ class TestFunctionRegistry(unittest.TestCase):
         # Retrieve function and check if it matches the registered function
         func = get_function("func1")
         self.assertEqual(func, sample_function_1)
-        
+
         # Call function
         self.assertEqual(func(), "Function 1")
 
@@ -55,6 +58,7 @@ class TestFunctionRegistry(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             get_function("unknown_func")
         self.assertEqual(str(cm.exception), "Unknown function: unknown_func")
+
 
 if __name__ == "__main__":
     unittest.main()

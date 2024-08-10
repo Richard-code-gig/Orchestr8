@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,17 +26,19 @@ from Scheduler.src.utils import get_scheduler_shutdown_wait, get_import_file
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 def signal_handler(signum: int, frame: Optional[object]) -> None:
     """Handle shutdown signals."""
     logger.info('Signal received, shutting down scheduler...')
     # scheduler().shutdown(get_scheduler_shutdown_wait())
     sys.exit(0)
 
+
 def load_and_register_modules(config_file: str) -> None:
     """Load modules and register functions specified in the configuration file."""
     with open(config_file, 'r') as file:
         lines = [line.strip() for line in file if line.strip() and not line.startswith('#')]
-    
+
     for line in lines:
         try:
             exec(line, globals())
@@ -77,6 +79,7 @@ def load_and_register_modules(config_file: str) -> None:
         except Exception as e:
             logger.error(f"Error executing import statement {line}: {e}")
 
+
 def read_input(source: str) -> str:
     """
     Reads input from a string or a file path.
@@ -100,7 +103,8 @@ def read_input(source: str) -> str:
     else:
         # Assume it's a string
         return source.strip()
-    
+
+
 def main() -> None:
     """
     Main function to handle command-line arguments and execute commands.
@@ -110,7 +114,7 @@ def main() -> None:
     """
     parser = ArgumentParser(description='Command-line tool for parsing and executing commands.')
     parser.add_argument('source', type=str, help='The source sql string or file path to read sql commands from')
-    
+
     args = parser.parse_args()
 
     try:
@@ -127,7 +131,7 @@ def main() -> None:
 
         try:
             input_content = read_input(source)
-            commands = input_content.splitlines() 
+            commands = input_content.splitlines()
             for input_command in commands:
                 execute_command(input_command)
             time.sleep(1)
@@ -136,7 +140,8 @@ def main() -> None:
             pass
 
     finally:
-            logger.info("Exiting the main function")
+        logger.info("Exiting the main function")
+
 
 if __name__ == "__main__":
     main()

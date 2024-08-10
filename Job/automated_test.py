@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ from Job.alerts import send_alerts
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
     sql_commands = []
     for test in tests:
@@ -28,17 +29,17 @@ def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
                 if test_type == 'row_count':
                     threshold = test_detail.get('threshold', 1)  # Default threshold is 1
                     sql_commands.append(f"""
-                        SELECT 'row_count' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) < {threshold} AS error 
+                        SELECT 'row_count' AS test_type, '{table}' AS table_name,
+                               COUNT(*) < {threshold} AS error
                         FROM {table}
                     """)
                 elif test_type == 'default_value_check':
                     column = test_detail['column']
                     default_value = test_detail['default_value']
                     sql_commands.append(f"""
-                        SELECT 'default_value_check' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 0 AS error 
-                        FROM {table} 
+                        SELECT 'default_value_check' AS test_type, '{table}' AS table_name,
+                               COUNT(*) > 0 AS error
+                        FROM {table}
                         WHERE {column} != '{default_value}'
                     """)
                 elif test_type == 'primary_key_uniqueness':
@@ -47,18 +48,18 @@ def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
                         column_name = column.get(table, None)
                         if column_name:
                             sql_commands.append(f"""
-                                SELECT 'primary_key_uniqueness' AS test_type, '{table}' AS table_name, 
-                                       COUNT(*) > 1 AS error 
-                                FROM {table} 
-                                GROUP BY {column_name} 
+                                SELECT 'primary_key_uniqueness' AS test_type, '{table}' AS table_name,
+                                       COUNT(*) > 1 AS error
+                                FROM {table}
+                                GROUP BY {column_name}
                                 HAVING COUNT(*) > 1
                             """)
                     else:
                         sql_commands.append(f"""
-                            SELECT 'primary_key_uniqueness' AS test_type, '{table}' AS table_name, 
-                                   COUNT(*) > 1 AS error 
-                            FROM {table} 
-                            GROUP BY {column} 
+                            SELECT 'primary_key_uniqueness' AS test_type, '{table}' AS table_name,
+                                   COUNT(*) > 1 AS error
+                            FROM {table}
+                            GROUP BY {column}
                             HAVING COUNT(*) > 1
                         """)
                 elif test_type == 'foreign_key':
@@ -66,27 +67,27 @@ def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
                     reference_table = test_detail['reference_table']
                     reference_key = test_detail['reference_key']
                     sql_commands.append(f"""
-                        SELECT 'foreign_key' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 0 AS error 
-                        FROM {table} 
-                        LEFT JOIN {reference_table} ON {table}.{foreign_key} = {reference_table}.{reference_key} 
+                        SELECT 'foreign_key' AS test_type, '{table}' AS table_name,
+                               COUNT(*) > 0 AS error
+                        FROM {table}
+                        LEFT JOIN {reference_table} ON {table}.{foreign_key} = {reference_table}.{reference_key}
                         WHERE {reference_table}.{reference_key} IS NULL
                     """)
                 elif test_type == 'null_check':
                     column = test_detail['column']
                     sql_commands.append(f"""
-                        SELECT 'null_check' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 0 AS error 
-                        FROM {table} 
+                        SELECT 'null_check' AS test_type, '{table}' AS table_name,
+                               COUNT(*) > 0 AS error
+                        FROM {table}
                         WHERE {column} IS NULL
                     """)
                 elif test_type == 'unique_value_check':
                     column = test_detail['column']
                     sql_commands.append(f"""
-                        SELECT 'unique_value_check' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 1 AS error 
-                        FROM {table} 
-                        GROUP BY {column} 
+                        SELECT 'unique_value_check' AS test_type, '{table}' AS table_name,
+                               COUNT(*) > 1 AS error
+                        FROM {table}
+                        GROUP BY {column}
                         HAVING COUNT(*) > 1
                     """)
                 elif test_type == 'data_range_check':
@@ -94,9 +95,9 @@ def generate_sql_command(tests: List[Dict[str, Any]]) -> str:
                     start_date = test_detail['start_date']
                     end_date = test_detail['end_date']
                     sql_commands.append(f"""
-                        SELECT 'data_range_check' AS test_type, '{table}' AS table_name, 
-                               COUNT(*) > 0 AS error 
-                        FROM {table} 
+                        SELECT 'data_range_check' AS test_type, '{table}' AS table_name,
+                               COUNT(*) > 0 AS error
+                        FROM {table}
                         WHERE {column} < '{start_date}' OR {column} > '{end_date}'
                     """)
                 elif test_type == 'custom_query':
@@ -126,8 +127,6 @@ def data_validate(
         oauth_token=oauth_token,
         saml_response=saml_response
     )
-
-    
     cur = conn.cursor()
     try:
         sql_command = generate_sql_command(tests)

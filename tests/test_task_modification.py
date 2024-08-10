@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@ from Scheduler.src.modify_task import _alter_task, execute_command, _update_task
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
-class TestSchedulerFunctions(unittest.TestCase):
 
+class TestSchedulerFunctions(unittest.TestCase):
     def setUp(self):
         # Set up mock scheduler
         self.mock_scheduler = MagicMock()
@@ -50,7 +50,7 @@ class TestSchedulerFunctions(unittest.TestCase):
         params = {'task_name': 'task2', 'action': 'SUSPEND'}
         _alter_task(params)
         self.mock_scheduler.pause_job.assert_called_with('task2')
-    
+
     def test_alter_task_remove(self):
         self.mock_scheduler.get_job.return_value = MagicMock()  # Simulate a found job
         params = {'task_name': 'task3', 'action': 'REMOVE'}
@@ -65,7 +65,7 @@ class TestSchedulerFunctions(unittest.TestCase):
         # Check if task's 'after' key is removed when empty
         self.assertNotIn('after', self.mock_task_conditions['task3'])
         self.assertEqual({'task3': {}}, self.mock_task_conditions)
-        
+
         # Check if the _update_task_graph is called properly
         self.mock_scheduler.pause_job.assert_called_with('task3')
 
@@ -83,23 +83,25 @@ class TestSchedulerFunctions(unittest.TestCase):
         self.assertEqual(trigger_call.timezone.zone, 'UTC')
 
     def test_alter_task_cron_schedule(self):
-        self.mock_scheduler.get_job.return_value = MagicMock() 
+        self.mock_scheduler.get_job.return_value = MagicMock()
         params = {'task_name': 'task5', 'cron_expr': '0 0 * * *', 'time_zone': 'UTC'}
         _alter_task(params)
-        
+
         # Extract the actual arguments passed to modify_job
         actual_call_args = self.mock_scheduler.modify_job.call_args
         actual_task_name = actual_call_args[0][0]
         actual_trigger = actual_call_args[1]['trigger']
-        
+
         # Create expected trigger
         expected_trigger = CronTrigger.from_crontab('0 0 * * *', timezone='UTC')
-        
+
         self.assertTrue(self.mock_scheduler.modify_job.called, "modify_job was not called")
-       
+
         # Assert 'task5' was passed as the first argument
-        self.assertEqual(actual_task_name, 'task5', 
-                     f"Expected task name 'task5', but got '{actual_task_name}'")
+        self.assertEqual(
+            actual_task_name, 'task5',
+            f"Expected task name 'task5', but got '{actual_task_name}'"
+        )
 
         self.assertEqual(str(actual_trigger), str(expected_trigger))
 
@@ -110,7 +112,7 @@ class TestSchedulerFunctions(unittest.TestCase):
         self.mock_scheduler.modify_job.assert_called_with('task6', max_instances=3)
 
     def test_update_task_graph(self):
-        self.mock_task_conditions['task3'] = {'after': ['task7','task8']}
+        self.mock_task_conditions['task3'] = {'after': ['task7', 'task8']}
         _update_task_graph('task3')
 
         self.assertNotIn('task7', self.mock_task_conditions)
@@ -134,6 +136,7 @@ class TestSchedulerFunctions(unittest.TestCase):
                     'cron_expr': '0 0 * * *',
                     'time_zone': 'UTC'
                 })
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,17 @@ import os
 import sys
 from pathlib import Path
 
+
 def get_user_settings_dir() -> Path:
     # Get user-specified directory. Default to ~/Orchestr8/Scheduler/src
     settings_dir = os.getenv('PACKAGE_PROJECT_DIR', os.path.expanduser('~/Orchestr8/Scheduler/src'))
     settings_path = Path(settings_dir)
     return settings_path
 
+
 def load_user_settings():
     user_settings_file = get_user_settings_dir() / 'SETTINGS.py'
-    
+
     if user_settings_file.exists():
         sys.path.insert(0, str(user_settings_file.parent))
         settings = __import__('SETTINGS')
@@ -31,6 +33,7 @@ def load_user_settings():
         return settings
     else:
         raise FileNotFoundError(f"User settings file not found at {user_settings_file}")
+
 
 # Load the settings once and make them available as module-level variables
 settings = load_user_settings()

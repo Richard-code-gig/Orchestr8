@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,10 +26,11 @@ scheduler = scheduler()
 
 task_conditions = {}
 
+
 def _alter_task(params: Dict) -> None:
     task_name = params['task_name']
     job = scheduler.get_job(task_name)
-    
+
     if not job:
         logger.info(f'Specified job with id {task_name} cannot be found')
         return
@@ -37,7 +38,7 @@ def _alter_task(params: Dict) -> None:
     action = params.get('action')
     try:
         action = action.upper()
-    except:
+    except Exception:
         pass
 
     if action:
@@ -48,7 +49,7 @@ def _alter_task(params: Dict) -> None:
             scheduler.pause_job(task_name)
             return
         elif action == 'REMOVE':
-            logger.info(f"Running action REMOVE")
+            logger.info("Running action REMOVE")
 
             if 'after' in params:
                 logger.info(f"After in {params}")
@@ -70,7 +71,7 @@ def _alter_task(params: Dict) -> None:
             else:
                 scheduler.remove_job(task_name)
                 return
-    
+
     if 'schedule' in params or 'cron_expr' in params:
         trigger = None
         if 'schedule' in params and params['schedule']:
@@ -91,19 +92,20 @@ def _alter_task(params: Dict) -> None:
                 raise ValueError("Interval time not recognized")
         elif 'cron_expr' in params and params['cron_expr']:
             trigger = CronTrigger.from_crontab(params['cron_expr'], timezone=params['time_zone'])
-        
+
         if trigger:
             try:
                 scheduler.modify_job(task_name, trigger=trigger)
             except Exception as e:
                 logger.warning(f"Error modifying job schedule: {e}")
-                
+
     if 'allow_overlapping_execution' in params:
         try:
             max_instances = int(params['allow_overlapping_execution'])
             scheduler.modify_job(task_name, max_instances=max_instances)
         except Exception as e:
             logger.warning(f"Error modifying job max instances: {e}")
+
 
 def _update_task_graph(task_name: str) -> None:
     """
@@ -112,20 +114,22 @@ def _update_task_graph(task_name: str) -> None:
     logger.debug(f"Task Conditions: {task_conditions}")  # Log task_conditions
     if not task_conditions:
         return
-    
+
     while task_conditions.get(task_name).get('after'):
         task_conditions[task_name]['after'].pop()
     scheduler.pause_job(task_name)
     logger.info(f"Task {task_name} is now a root task and automatically suspended")
     return
 
+
 def execute_command(command: str) -> None:
     try:
         params = modify_command(command)
         _alter_task(params)
-    
+
     except ValueError as e:
         logger.error(f"Error: {e}")
+
 
 if scheduler.state == 0:
     scheduler.resume()

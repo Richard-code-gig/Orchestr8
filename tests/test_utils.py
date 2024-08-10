@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,29 +15,29 @@ import unittest
 from unittest.mock import patch, MagicMock
 from Scheduler.src.utils import (
     get_setting,
-    get_scheduler_type, 
+    get_scheduler_type,
     get_import_file,
     get_parameter_file,
     get_commands_file,
-    get_misfire_grace_time, 
-    get_scheduler_start_paused, 
-    get_scheduler_shutdown_wait, 
-    get_jobstore_settings, 
-    get_timezone, 
-    get_error_log_settings, 
+    get_misfire_grace_time,
+    get_scheduler_start_paused,
+    get_scheduler_shutdown_wait,
+    get_jobstore_settings,
+    get_timezone,
+    get_error_log_settings,
     debug_config
 )
 
-class TestSettingsFunctions(unittest.TestCase):
 
+class TestSettingsFunctions(unittest.TestCase):
     @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
     def test_get_setting(self, mock_settings):
         # Setup mock
         mock_settings.SOME_SETTING = 'some_value'
-        
+
         # Test retrieval with default value
         self.assertEqual(get_setting('SOME_SETTING', 'default_value'), 'some_value')
-        
+
     @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
     def test_get_scheduler_type(self, mock_settings):
         """Test retrieval of scheduler type."""
@@ -49,7 +49,7 @@ class TestSettingsFunctions(unittest.TestCase):
         """Test retrieval of debug configuration."""
         mock_settings.IMPORT_FILE = 'config.py'
         self.assertEqual(get_import_file(), 'config.py')
-    
+
     @patch('Scheduler.src.utils.settings', new_callable=MagicMock)
     def test_parameter_file(self, mock_settings):
         """Test retrieval of debug configuration."""
@@ -109,6 +109,7 @@ class TestSettingsFunctions(unittest.TestCase):
         """Test retrieval of debug configuration."""
         mock_settings.DEBUG = True
         self.assertEqual(debug_config(), True)
+
 
 if __name__ == "__main__":
     unittest.main()

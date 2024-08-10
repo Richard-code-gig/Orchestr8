@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,10 @@ import requests
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 def _mock_send_alert(method, message):
     logger.info(f"Alert sent via {method}: {message}")
+
 
 def _send_slack_alert(webhook_url, message):
     payload = {
@@ -28,11 +30,12 @@ def _send_slack_alert(webhook_url, message):
         'Content-Type': 'application/json'
     }
     response = requests.post(webhook_url, headers=headers, json=payload)
-    
+
     if response.status_code == 200:
         logger.info(f"Alert sent to Slack successfully: {message}")
     else:
         logger.error(f"Failed to send alert to Slack: {response.text}")
+
 
 def _send_datadog_alert(api_key, endpoint, message):
     payload = {"message": message}
@@ -42,6 +45,7 @@ def _send_datadog_alert(api_key, endpoint, message):
         logger.info(f"Alert sent to Datadog successfully: {message}")
     else:
         logger.error(f"Failed to send alert to Datadog: {response.text}")
+
 
 def _send_grafana_alert(api_key, endpoint, message):
     headers = {
@@ -58,6 +62,7 @@ def _send_grafana_alert(api_key, endpoint, message):
         logger.info(f"Alert sent to Grafana successfully: {message}")
     else:
         logger.error(f"Failed to send alert to Grafana: {response.text}")
+
 
 def send_alerts(error_reporting, messages):
     combined_message = "\n".join(messages)
