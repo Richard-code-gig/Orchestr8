@@ -19,6 +19,9 @@ jobs:
     - name: Lint code
       run: flake8 .
 
+    - name: Set PACKAGE_PROJECT_DIR
+      run: echo "PACKAGE_PROJECT_DIR=/home/runner/work/Orchestr8/Orchestr8/Scheduler/src" >> $GITHUB_ENV
+
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=/home/runner/work/Orchestr8/Orchestr8" >> $GITHUB_ENV
 
