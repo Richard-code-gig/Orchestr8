@@ -20,7 +20,7 @@ jobs:
       run: flake8 .
 
     - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=/home/runner/work/Orchestr8" >> $GITHUB_ENV
+      run: echo "PYTHONPATH=/home/runner/work/Orchestr8/Orchestr8" >> $GITHUB_ENV
 
     - name: Print directory structure
       run: |
@@ -29,5 +29,8 @@ jobs:
     - name: Print PYTHONPATH
       run: echo "PYTHONPATH is set to $PYTHONPATH"
 
+    - name: Print directory structure
+      run: ls -R /home/runner/work/Orchestr8/Orchestr8
+
     - name: Run tests
-      run: pytest /home/runner/work/Orchestr8/tests
+      run: pytest /home/runner/work/Orchestr8/Orchestr8/tests
