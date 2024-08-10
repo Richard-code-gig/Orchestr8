@@ -20,7 +20,7 @@ jobs:
       run: flake8 .
 
     - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+      run: echo "PYTHONPATH=/home/runner/work/Orchestr8" >> $GITHUB_ENV
 
     - name: Print directory structure
       run: |
